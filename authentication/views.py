@@ -12,9 +12,12 @@ from django.http import HttpResponse
 import io
 import zipfile
 from io import BytesIO
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 
 # the codes
+
 def generate_code(request):
     if request.method == "POST":
         num_codes = int(request.POST.get("num_codes", 1))
@@ -23,43 +26,34 @@ def generate_code(request):
 
         for _ in range(num_codes):
             code = str(uuid.uuid4())
-            qr = qrcode.make(f"http://127.0.0.1:8000/verify/{code}")
+
+            # ✅ QR code will contain only the UUID — clean and minimal
+            qr = qrcode.make(code)
             filename = f"{code}.png"
             filepath = os.path.join(settings.MEDIA_ROOT, filename)
             qr.save(filepath)
 
+            # Save code and image to database
             product_code = ProductCode.objects.create(
                 code=code,
                 product_name=product_name
             )
             product_code.qr_code_image.name = filename
             product_code.save()
+
             generated_codes.append(product_code)
 
+        # ✅ Store recently generated IDs in session
         request.session['recent_codes'] = [str(c.id) for c in generated_codes]
 
         return redirect('generate_code')
 
-    recent_ids = request.session.get('recent_codes', [])
+    # 🧠 Display only recent codes — limit to last 6
+    recent_ids = request.session.get('recent_codes', [])[-6:]
     codes = ProductCode.objects.filter(id__in=recent_ids)
 
     return render(request, "authentication/generate.html", {"codes": codes})
 
-
-def verify_code(request, code):
-    try:
-        code_obj = ProductCode.objects.get(code=code)
-        if code_obj.used:
-            message = "⚠️ This product has already been verified."
-        else:
-            message = "✅ This product is genuine!"
-            code_obj.used = True
-            code_obj.used_at = now()
-            code_obj.save()
-    except ProductCode.DoesNotExist:
-        message = "❌ Invalid or fake product code."
-
-    return render(request, 'authentication/verify.html', {'message': message})
 
 
 def download_pdf(request):
@@ -152,3 +146,26 @@ def download_all_codes_zip(request):
 
     zip_buffer.close()
     return response
+
+
+def verify_code(request, code):
+    product = get_object_or_404(ProductCode, code=code)
+
+    if request.method == 'POST':
+        if not product.used:
+            consumed = request.POST.get('consumed') == 'yes'
+            if consumed:
+                product.used = True
+                product.save()
+                messages.success(request, 'Product marked as used.')
+            else:
+                messages.info(request, 'Product marked as unused.')
+        else:
+            messages.error(request, 'This product has already been used.')
+        return redirect('verify_code', code=code)
+
+    context = {'product': product}
+    return render(request, 'authentication/verify.html', context)
+
+def scan_qr_page(request):
+    return render(request, 'authentication/scan.html')

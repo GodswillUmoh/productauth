@@ -1,2 +1,9 @@
-Django>=4.2
-qrcode[pil]
+asgiref==3.8.1
+chardet==5.2.0
+colorama==0.4.6
+Django==5.2.1
+pillow==11.2.1
+qrcode==8.2
+reportlab==4.4.1
+sqlparse==0.5.3
+tzdata==2025.2

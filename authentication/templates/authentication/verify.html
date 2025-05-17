@@ -1,14 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Verify Product</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="container py-5">
-    <h1>Verification Result</h1>
-    <div class="alert alert-info">
-        {{ message }}
+
+    <h2>Verify Product</h2>
+
+    <div class="alert alert-{{ message.tags }}" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
     </div>
-    <a href="/generate/" class="btn btn-secondary">Generate Another Code</a>
+
+    <div class="card p-3 mb-4">
+        <h4>{{ product.product_name }}</h4>
+        <img src="{{ product.qr_code_image.url }}" alt="QR Code" class="img-thumbnail" width="200">
+        <p class="mt-2"><strong>Status:</strong> 
+            {% if product.used %}
+                <span class="text-danger">Already Used</span>
+            {% else %}
+                <span class="text-success">Unused</span>
+            {% endif %}
+        </p>
+    </div>
+
+    {% if not product.used %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Has the product been consumed?</label><br>
+            <button type="submit" name="consumed" value="yes" class="btn btn-danger">Yes</button>
+            <button type="submit" name="consumed" value="no" class="btn btn-secondary">No</button>
+        </div>
+    </form>
+    {% endif %}
 </body>
 </html>

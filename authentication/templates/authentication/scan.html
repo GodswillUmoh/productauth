@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Product QR Code</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- QR Code Scanner JS -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <style>
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-3">Scan Product QR Code</h2>
+                    <p class="lead mb-4">Align the QR code inside the box to scan.</p>
+
+                    <!-- Button to start scan -->
+                    <button id="start-scan-btn" class="btn btn-primary mb-4">Start Scan</button>
+
+                    <!-- Scanner UI container -->
+                    <div id="reader" class="border rounded d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS to handle scanner -->
+<script>
+    const startScanBtn = document.getElementById("start-scan-btn");
+    const reader = document.getElementById("reader");
+
+    startScanBtn.addEventListener("click", function () {
+        reader.classList.remove("d-none");
+
+        const html5QrCode = new Html5Qrcode("reader");
+
+        html5QrCode.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            (decodedText, decodedResult) => {
+                html5QrCode.stop().then(() => {
+                    // Extract UUID if decodedText is a full URL
+                    let code = decodedText.split('/').filter(Boolean).pop();
+                    window.location.href = `/verify/${code}/`;
+                });
+            },
+            (errorMessage) => {
+                console.warn(`QR scan error: ${errorMessage}`);
+            }
+        ).catch(err => {
+            console.error("Unable to start scanning:", err);
+            alert("Error starting the camera. Please allow camera access.");
+        });
+    });
+
+    // After successful scan
+    function onScanSuccess(decodedText, decodedResult) {
+        window.location.href = `/verify/${decodedText}/`;
+    }
+</script>
+
+</body>
+</html>
