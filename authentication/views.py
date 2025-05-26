@@ -148,6 +148,7 @@ def download_all_codes_zip(request):
     return response
 
 
+
 def verify_code(request, code):
     product = get_object_or_404(ProductCode, code=code)
 
@@ -164,8 +165,26 @@ def verify_code(request, code):
             messages.error(request, 'This product has already been used.')
         return redirect('verify_code', code=code)
 
-    context = {'product': product}
+    context = {
+        'product': product,
+        'image': product.image.url if product.image else None,
+        'nafdac_no': product.nafdac_no,
+        'date_produced': product.date_produced,
+        'date_expired': product.date_expired,
+        'manufacturer': product.manufacturer,
+        'location_manufactured': product.location_manufactured,
+        'ingredients': product.ingredients,
+    }
+
     return render(request, 'authentication/verify.html', context)
+
+
 
 def scan_qr_page(request):
     return render(request, 'authentication/scan.html')
+
+
+#added
+
+
+

@@ -1,41 +1,85 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+{% block title %}Generate Product_Qr_Code{% endblock %}
+
+{% block content %}
 <head>
     <title>Verify Product</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body class="container py-5">
+<body class="bg-light py-5">
 
-    <h2>Verify Product</h2>
+<div class="container">
+    <h2 class="mb-4 text-center text-primary">Verify Product</h2>
 
-    <div class="alert alert-{{ message.tags }}" role="alert">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    </div>
-
-    <div class="card p-3 mb-4">
-        <h4>{{ product.product_name }}</h4>
-        <img src="{{ product.qr_code_image.url }}" alt="QR Code" class="img-thumbnail" width="200">
-        <p class="mt-2"><strong>Status:</strong> 
-            {% if product.used %}
-                <span class="text-danger">Already Used</span>
-            {% else %}
-                <span class="text-success">Unused</span>
-            {% endif %}
-        </p>
-    </div>
-
-    {% if not product.used %}
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label>Has the product been consumed?</label><br>
-            <button type="submit" name="consumed" value="yes" class="btn btn-danger">Yes</button>
-            <button type="submit" name="consumed" value="no" class="btn btn-secondary">No</button>
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
         </div>
-    </form>
     {% endif %}
+
+    <div class="card shadow p-4 mb-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-md-4 text-center">
+                <img src="{{ image }}" alt="Product Image" class="img-fluid rounded">
+                <img src="{{ product.qr_code_image.url }}" alt="QR Code" class="img-thumbnail mt-3" width="200">
+            </div>
+            <div class="col-md-8">
+                <h4 class="card-title">{{ product.product_name }}</h4>
+                <p><strong>Status:</strong>
+                    {% if product.used %}
+                        <span class="badge bg-danger">Already Used</span>
+                    {% else %}
+                        <span class="badge bg-success">Unused</span>
+                    {% endif %}
+                </p>
+
+                <ul class="list-group mb-3">
+                    <li class="list-group-item"><strong>NAFDAC Number:</strong> {{ nafdac_no }}</li>
+                    <li class="list-group-item"><strong>Date Produced:</strong> {{ date_produced }}</li>
+                    <li class="list-group-item"><strong>Date Expired:</strong> {{ date_expired }}</li>
+                    <li class="list-group-item"><strong>Manufacturer:</strong> {{ manufacturer }}</li>
+                    <li class="list-group-item"><strong>Location:</strong> {{ location_manufactured }}</li>
+                </ul>
+
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                More Details (Ingredients)
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {{ ingredients }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if not product.used %}
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Has the product been consumed?</label><br>
+                        <button type="submit" name="consumed" value="yes" class="btn btn-danger me-2">Yes</button>
+                        <button type="submit" name="consumed" value="no" class="btn btn-outline-secondary">No</button>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-5 text-muted">
+        <small><strong>BINGCHECKS IS YOUR SHIELD AGAINST COUNTERFEITS.</strong></small>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+{% endblock %}
