@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Generate Product_Qr_Code{% endblock %}
   
-
 {% block content %}
 <meta charset="UTF-8">
   <title>Generate QR Code</title>
@@ -20,11 +19,46 @@
     <div class="card-body">
       <h2 class="card-title mb-4 text-primary"><i class="bi bi-qr-code"></i> Generate Product QR Codes</h2>
 
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
           <label for="product_name" class="form-label">Product Name:</label>
           <input type="text" name="product_name" class="form-control" id="product_name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="manufacturer" class="form-label">Manufacturer:</label>
+          <input type="text" name="manufacturer" class="form-control" id="manufacturer" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="nafdac_no" class="form-label">NAFDAC Number:</label>
+          <input type="text" name="nafdac_no" class="form-control" id="nafdac_no" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="date_produced" class="form-label">Date Produced:</label>
+          <input type="date" name="date_produced" class="form-control" id="date_produced" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="date_expired" class="form-label">Date Expired:</label>
+          <input type="date" name="date_expired" class="form-control" id="date_expired" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="location_manufactured" class="form-label">Location Manufactured:</label>
+          <input type="text" name="location_manufactured" class="form-control" id="location_manufactured" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="ingredients" class="form-label">Ingredients:</label>
+          <textarea name="ingredients" class="form-control" id="ingredients" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Product Image (optional):</label>
+          <input type="file" name="image" class="form-control" id="image">
         </div>
 
         <div class="mb-3">
@@ -64,10 +98,10 @@
         {% endif %}
 
         <div class="mt-4 d-flex gap-3 flex-wrap justify-content-center">
-          <a href="{% url 'download_all_codes_pdf' %}" class="btn btn-outline-success">
+          <a href="{% url 'authentication:download_all_codes_pdf' %}" class="btn btn-outline-success">
             <i class="bi bi-file-earmark-pdf"></i> Download All (PDF)
           </a>
-          <a href="{% url 'download_all_codes_zip' %}" class="btn btn-outline-info">
+          <a href="{% url 'authentication:download_all_codes_zip' %}" class="btn btn-outline-info">
             <i class="bi bi-file-earmark-zip"></i> Download All (ZIP)
           </a>
         </div>

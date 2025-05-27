@@ -1,21 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}BingChecks{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="BingChecks - Authenticate your product with QR code technology.">
+    <meta name="keywords" content="QR Code, Product Authentication, NAFDAC, Verify Product, BingChecks">
+    <meta name="author" content="BingChecks Team">
+
+    <title>{% block title %}BingChecks | Product Authentication{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS (optional if needed) -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #0dcaf0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
+    <!-- Navbar -->
     {% include 'includes/navbar.html' %}
 
-    <div class="container mt-4">
+    <!-- Main Content -->
+    <div class="container main-content mt-4">
         {% include 'includes/messages.html' %}
-        {% block content %}{% endblock %}
+        {% block content %}
+        
+        <!-- Hero Section -->
+<section class="py-5 text-center bg-light">
+  <section class="py-5 text-center text-white" style="background-color: #831973;">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Welcome to BingChecks</h1>
+    <p class="lead mb-4">End-to-end product tracking and authentication system empowering manufacturers, regulators, and consumers to fight counterfeits.</p>
+  </div>
+</section>
+
+<!-- Feature Boxes -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">Product Verification</h5>
+            <p class="card-text">Instantly verify product authenticity using secure QR codes to protect your brand and consumers.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">Counterfeit Reporting Hub</h5>
+            <p class="card-text">Consumers and field agents can report suspicious products, helping authorities respond quickly.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">Analytics for Manufacturers</h5>
+            <p class="card-text">Get insights into product scans, regional activity, and alert trends to support better decision-making.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Accordion Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h3 class="mb-4">Platform Highlights</h3>
+    <div class="accordion" id="bingAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+            Government Agency Portal
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#bingAccordion">
+          <div class="accordion-body">
+            Regulatory bodies get real-time access to verification stats, reports, and alerts across regions.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            Consumer Alerts
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#bingAccordion">
+          <div class="accordion-body">
+            Notify customers when counterfeit risks are high or if recalls affect specific products or locations.
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+            Educational Resources
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#bingAccordion">
+          <div class="accordion-body">
+            Provide users with guides, videos, and articles on how to identify authentic products and stay protected.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Image Grid Section -->
+<section class="py-5">
+  <div class="container">
+    <h3 class="mb-4 text-center">How BingChecks Works</h3>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <img src="{% static 'images/scan.png' %}" alt="Scan QR" class="img-fluid rounded shadow-sm mb-2">
+        <h6>Scan QR Code</h6>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="{% static 'images/verify.png' %}" alt="Verify Product" class="img-fluid rounded shadow-sm mb-2">
+        <h6>Verify Product Info</h6>
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="{% static 'images/report.png' %}" alt="Report Fake" class="img-fluid rounded shadow-sm mb-2">
+        <h6>Report Suspected Fakes</h6>
+      </div>
+    </div>
+  </div>
+</section>
+
+        {% endblock %}
     </div>
 
+    <!-- Footer -->
     {% include 'includes/footer.html' %}
 
+    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

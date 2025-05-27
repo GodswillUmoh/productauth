@@ -14,6 +14,7 @@ import zipfile
 from io import BytesIO
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from datetime import datetime
 
 
 # the codes
@@ -22,33 +23,46 @@ def generate_code(request):
     if request.method == "POST":
         num_codes = int(request.POST.get("num_codes", 1))
         product_name = request.POST.get("product_name", "")
+        manufacturer = request.POST.get("manufacturer", "")
+        nafdac_no = request.POST.get("nafdac_no", "")
+        date_produced = request.POST.get("date_produced", "")
+        date_expired = request.POST.get("date_expired", "")
+        location_manufactured = request.POST.get("location_manufactured", "")
+        ingredients = request.POST.get("ingredients", "")
+        image = request.FILES.get("image")
+
         generated_codes = []
 
         for _ in range(num_codes):
             code = str(uuid.uuid4())
 
-            # ✅ QR code will contain only the UUID — clean and minimal
+            # ✅ Generate QR code from UUID
             qr = qrcode.make(code)
             filename = f"{code}.png"
             filepath = os.path.join(settings.MEDIA_ROOT, filename)
             qr.save(filepath)
 
-            # Save code and image to database
+            # ✅ Save product details to DB
             product_code = ProductCode.objects.create(
                 code=code,
-                product_name=product_name
+                product_name=product_name,
+                manufacturer=manufacturer,
+                nafdac_no=nafdac_no,
+                date_produced=date_produced,
+                date_expired=date_expired,
+                location_manufactured=location_manufactured,
+                ingredients=ingredients,
+                image=image  # optional image
             )
             product_code.qr_code_image.name = filename
             product_code.save()
 
             generated_codes.append(product_code)
 
-        # ✅ Store recently generated IDs in session
         request.session['recent_codes'] = [str(c.id) for c in generated_codes]
+        return redirect('authentication:generate_code')
 
-        return redirect('generate_code')
-
-    # 🧠 Display only recent codes — limit to last 6
+    # 🧠 Show last 6 recent codes
     recent_ids = request.session.get('recent_codes', [])[-6:]
     codes = ProductCode.objects.filter(id__in=recent_ids)
 
@@ -163,7 +177,7 @@ def verify_code(request, code):
                 messages.info(request, 'Product marked as unused.')
         else:
             messages.error(request, 'This product has already been used.')
-        return redirect('verify_code', code=code)
+        return redirect('authentication:verify_code', code=code)
 
     context = {
         'product': product,
@@ -185,6 +199,8 @@ def scan_qr_page(request):
 
 
 #added
-
+# views.py
+def home(request):
+    return render(request, 'base.html', {'now': datetime.now()})
 
 
