@@ -1,0 +1,12 @@
+/* custom_admin.css */
+#header {
+    background-color: #4B0082; /* Deep purple */
+    color: white;
+}
+#header h1 a {
+    color: white !important;
+}
+.module h2 {
+    background-color: #4B0082 !important;
+    color: white !important;
+}

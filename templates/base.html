@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     {% load static %}
+       {% include 'includes/navbar.html' %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +27,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #7B1FA2;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -51,8 +52,11 @@
         footer a:hover {
             text-decoration: underline;
         }
+        
+      
     </style>
 </head>
+ {% load static %}
 <body>
 
     <!-- Navbar -->
@@ -64,111 +68,146 @@
         {% block content %}
         
         <!-- Hero Section -->
-<section class="py-5 text-center bg-light">
-  <section class="py-5 text-center text-white" style="background-color: #831973;">
-  <div class="container">
-    <h1 class="display-5 fw-bold">Welcome to BingChecks</h1>
-    <p class="lead mb-4">End-to-end product tracking and authentication system empowering manufacturers, regulators, and consumers to fight counterfeits.</p>
-  </div>
+
+
+
+<!-- Banner Section -->
+<section class="text-center bg-light">
+    <!-- Full-width Banner Image -->
+    <img src="{% static 'images/banner.png' %}" 
+         class="img-fluid w-100" 
+         alt="BingChecks Banner">
+
+    <!-- Overlayed Text -->
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold">Welcome to BingChecks</h1>
+        <p class="lead mb-4">
+            End-to-end product tracking and authentication system 
+            empowering manufacturers, regulators, and consumers to fight counterfeits.
+        </p>
+    </div>
 </section>
+
+
+
+
 
 <!-- Feature Boxes -->
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="row text-center">
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <h5 class="card-title">Product Verification</h5>
-            <p class="card-text">Instantly verify product authenticity using secure QR codes to protect your brand and consumers.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <h5 class="card-title">Counterfeit Reporting Hub</h5>
-            <p class="card-text">Consumers and field agents can report suspicious products, helping authorities respond quickly.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <h5 class="card-title">Analytics for Manufacturers</h5>
-            <p class="card-text">Get insights into product scans, regional activity, and alert trends to support better decision-making.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Accordion Section -->
-<section class="py-5 bg-light">
-  <div class="container">
-    <h3 class="mb-4">Platform Highlights</h3>
-    <div class="accordion" id="bingAccordion">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-            Government Agency Portal
-          </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#bingAccordion">
-          <div class="accordion-body">
-            Regulatory bodies get real-time access to verification stats, reports, and alerts across regions.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-            Consumer Alerts
-          </button>
-        </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#bingAccordion">
-          <div class="accordion-body">
-            Notify customers when counterfeit risks are high or if recalls affect specific products or locations.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-            Educational Resources
-          </button>
-        </h2>
-        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#bingAccordion">
-          <div class="accordion-body">
-            Provide users with guides, videos, and articles on how to identify authentic products and stay protected.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- Feature Boxes with Images -->
 
 <!-- Image Grid Section -->
 <section class="py-5">
   <div class="container">
-    <h3 class="mb-4 text-center">How BingChecks Works</h3>
+    <h3 class="mb-4 text-center">Steps to take- Processes</h3>
     <div class="row text-center">
       <div class="col-md-4 mb-4">
         <img src="{% static 'images/scan.png' %}" alt="Scan QR" class="img-fluid rounded shadow-sm mb-2">
         <h6>Scan QR Code</h6>
       </div>
       <div class="col-md-4 mb-4">
-        <img src="{% static 'images/verify.png' %}" alt="Verify Product" class="img-fluid rounded shadow-sm mb-2">
+        <img src="{% static 'images/verify2.png' %}" alt="Verify Product" class="img-fluid rounded shadow-sm mb-2">
         <h6>Verify Product Info</h6>
       </div>
       <div class="col-md-4 mb-4">
-        <img src="{% static 'images/report.png' %}" alt="Report Fake" class="img-fluid rounded shadow-sm mb-2">
+        <img src="{% static 'images/report2.png' %}" alt="Report Fake" class="img-fluid rounded shadow-sm mb-2">
         <h6>Report Suspected Fakes</h6>
       </div>
     </div>
   </div>
 </section>
+<!-- Feature Boxes -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row text-center">
+      <h3 class="mb-4 text-center">How BingChecks Works</h3>
+
+      <!-- Product Verification -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <img src="{% static 'images/verify.png' %}" alt="Product Verification" class="img-fluid rounded shadow-sm mb-2">
+          <div class="card-body">
+            <h5 class="card-title">Who Verifies?</h5>
+            <p class="card-text">
+              You the customer is expected to verify the authencity of the product by scanning the barcode. This is to protect the brand and consumers against fake products.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Counterfeit Reporting Hub -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <img src="{% static 'images/report.png' %}" alt="Counterfeit Reporting" class="img-fluid rounded shadow-sm mb-2">
+          <div class="card-body">
+            <h5 class="card-title">Where to Report?</h5>
+            <p class="card-text">
+              Once you are able to scan the products, check if product is already used. Once declared used, report the seller to the us, with the specific info on how to get the sellers. 
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics for Manufacturers -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <img src="{% static 'images/analytics.png' %}" alt="Analytics for Manufacturers" class="img-fluid rounded shadow-sm mb-2">
+          <div class="card-body">
+            <h5 class="card-title">Trends</h5>
+            <p class="card-text">
+              The trends of fake products is tracked and curb through analytical insights. We track and use patterns in handling the fake product issues.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<div class="accordion" id="infoAccordion">
+  <!-- Who Verifies -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Customer Verification
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#infoAccordion">
+      <div class="accordion-body">
+        You, as the customer, are responsible for confirming the authenticity of the product by scanning its barcode. This process helps protect both the brand and consumers from counterfeit products.
+      </div>
+    </div>
+  </div>
+
+  <!-- Where to Report -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Reporting Used Products
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#infoAccordion">
+      <div class="accordion-body">
+        After scanning a product, check whether it has already been marked as used. If it is, report the seller to us and provide the relevant details to identify them. By doing so, you contribute to the fight against counterfeit goods.
+      </div>
+    </div>
+  </div>
+
+  <!-- Trends -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Tracking and Analytics
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#infoAccordion">
+      <div class="accordion-body">
+       The prevalence of counterfeit products is monitored and addressed using analytical insights. We analyze patterns to effectively manage and reduce issues related to fake products.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
         {% endblock %}
     </div>
