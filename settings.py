@@ -4,6 +4,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-abc123'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -15,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
     'authentication',
 ]
 

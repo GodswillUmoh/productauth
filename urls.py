@@ -8,6 +8,7 @@ from authentication.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),  # Home page shows base.html
+    path('accounts/', include('accounts.urls')),
     path('generate/', include('authentication.urls')),  # Routes for your app
 ]
 

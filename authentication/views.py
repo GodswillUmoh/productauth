@@ -36,14 +36,15 @@ def generate_code(request):
         for _ in range(num_codes):
             code = str(uuid.uuid4())
 
-            # ✅ Generate QR code from UUID
+            # ✅ Generate QR code
             qr = qrcode.make(code)
             filename = f"{code}.png"
             filepath = os.path.join(settings.MEDIA_ROOT, filename)
             qr.save(filepath)
 
-            # ✅ Save product details to DB
+            # ✅ Save to DB with user
             product_code = ProductCode.objects.create(
+                user=request.user,  # ✅ associate with logged-in user
                 code=code,
                 product_name=product_name,
                 manufacturer=manufacturer,
@@ -52,20 +53,19 @@ def generate_code(request):
                 date_expired=date_expired,
                 location_manufactured=location_manufactured,
                 ingredients=ingredients,
-                image=image  # optional image
+                image=image
             )
             product_code.qr_code_image.name = filename
             product_code.save()
 
             generated_codes.append(product_code)
 
-        request.session['recent_codes'] = [str(c.id) for c in generated_codes]
-        return redirect('authentication:generate_code')
+        # After generating, go to dashboard
+        return redirect('accounts:dashboard')
 
-    # 🧠 Show last 6 recent codes
+    # GET request
     recent_ids = request.session.get('recent_codes', [])[-6:]
     codes = ProductCode.objects.filter(id__in=recent_ids)
-
     return render(request, "authentication/generate.html", {"codes": codes})
 
 
