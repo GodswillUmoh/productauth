@@ -16,13 +16,15 @@ DEBUG = os.environ.get("DEBUG") == "True"
 
 #ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
-import os
+render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    os.getenv("RENDER_EXTERNAL_HOSTNAME"),   # Render will inject this value
 ]
+
+if render_host:
+    ALLOWED_HOSTS.append(render_host)
 
 
 INSTALLED_APPS = [
