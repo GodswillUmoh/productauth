@@ -1,28 +1,32 @@
-from pathlib import Path
-
 import os
-SECRET_KEY = os.environ.get("SECRET_KEY")
+from pathlib import Path
+from dotenv import load_dotenv
+#SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv()  # Local only
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable not set")
+
+
 
 #SECRET_KEY = 'django-insecure-abc123'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-DEBUG=False
-DEBUG = os.environ.get("DEBUG") == "True"
 
 #ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
-render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+#render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-]
-
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
     ALLOWED_HOSTS.append(render_host)
 
@@ -49,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 ROOT_URLCONF = 'productauth.urls'
 
 TEMPLATES = [
@@ -70,9 +76,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'productauth.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -102,15 +108,17 @@ else:
 
 
 # ✅ Static & Media
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]   # for dev
-STATIC_ROOT = BASE_DIR / "staticfiles"     # for collectstatic in production
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
 
