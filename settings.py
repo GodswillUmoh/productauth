@@ -1,14 +1,20 @@
 from pathlib import Path
 
+import os
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-abc123'
+#SECRET_KEY = 'django-insecure-abc123'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG=False
+DEBUG = os.environ.get("DEBUG") == "True"
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 INSTALLED_APPS = [
     "jazzmin",   # optional, if you want jazzmin admin
@@ -63,6 +69,27 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_TZ = True
 
+
+# SQLITE database on Render
+if os.environ.get("RENDER"):
+    # Use SQLite in production
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
+else:
+    # Local development SQLite (same)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+
+
 # ✅ Static & Media
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]   # for dev
@@ -72,3 +99,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
