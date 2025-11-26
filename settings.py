@@ -16,6 +16,15 @@ DEBUG = os.environ.get("DEBUG") == "True"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
+import os
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    os.getenv("RENDER_EXTERNAL_HOSTNAME"),   # Render will inject this value
+]
+
+
 INSTALLED_APPS = [
     "jazzmin",   # optional, if you want jazzmin admin
     'django.contrib.admin',
