@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: bingchecks-app
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn productauth.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: productauth.settings

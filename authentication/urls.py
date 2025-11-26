@@ -13,6 +13,7 @@ urlpatterns = [
     path("download/pdf/", views.download_all_codes_pdf, name="download_all_codes_pdf"),
     path("download/zip/", views.download_all_codes_zip, name="download_all_codes_zip"),  
     path('scan/', views.scan_qr_page, name='scan_qr'),
+     
     #path('verify/<str:code>/', views.verify_product, name='verify_product'),
 
 ]
@@ -34,6 +35,8 @@ urlpatterns = [
     path('download/zip/', views.download_all_codes_zip, name='download_all_codes_zip'),  
     path('scan/', views.scan_qr_page, name='scan_qr'),
     path("download/pdf/", views.download_all_codes_pdf, name="download_all_codes_pdf"),
+    path('price/', views.price_view, name='price'),
+    path('contact/', views.contact_view, name='contact'),
     
 ]
 

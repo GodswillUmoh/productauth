@@ -18,11 +18,12 @@ class ProductCode(models.Model):
     date_expired = models.DateField(default=datetime.date(2025, 5, 26))
     location_manufactured = models.CharField(max_length=255, default='Lagos')
     ingredients = models.TextField(default='Not Available')
+    is_paid = models.BooleanField(default=False)
+
 
     from django.contrib.auth.models import User
 
-
-   
+ 
 
 
     def __str__(self):

@@ -15,10 +15,12 @@ from io import BytesIO
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+
 
 
 # the codes
-
+@login_required(login_url='accounts:login')
 def generate_code(request):
     if request.method == "POST":
         num_codes = int(request.POST.get("num_codes", 1))
@@ -68,6 +70,10 @@ def generate_code(request):
     codes = ProductCode.objects.filter(id__in=recent_ids)
     return render(request, "authentication/generate.html", {"codes": codes})
 
+   
+  
+ 
+ 
 
 
 def download_pdf(request):
@@ -196,6 +202,16 @@ def verify_code(request, code):
 
 def scan_qr_page(request):
     return render(request, 'authentication/scan.html')
+
+
+def price_view(request):
+    return render(request, 'authentication/price.html')
+
+
+def contact_view(request):
+    return render(request, 'authentication/contact.html')
+
+
 
 
 #added

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Pricing Calculator | BingChecks{% endblock %}
+
+{% block content %}
+<br>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-white text-center" style="background-color: #7B1FA2;">
+                    <h4 class="mb-0">QR Code Pricing Calculator</h4>
+                </div>
+                <div class="card-body">
+
+                    <!-- Calculator Form -->
+                    <form id="priceForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="approve" class="form-label">Approve Percentage (%)</label>
+                            <input type="number" class="form-control" id="approve" placeholder="e.g. 2" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="unitPrice" class="form-label">Unit Price of Product (₦)</label>
+                            <input type="number" class="form-control" id="unitPrice" placeholder="e.g. 1000" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="numCodes" class="form-label">Number of QR Codes</label>
+                            <input type="number" class="form-control" id="numCodes" placeholder="e.g. 10" required>
+                        </div>
+                        <button type="submit" class="btn w-100 text-white" style="background-color: #7B1FA2;">Calculate</button>
+                    </form>
+
+                    <!-- Result -->
+                    <div class="alert alert-success mt-4 d-none" id="resultBox">
+                        <strong>Result:</strong>
+                        <p class="mb-0" id="resultText"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="card mt-5 shadow-sm">
+                <div class="card-header text-white text-center" style="background-color: #7B1FA2;">
+                    <h5 class="mb-0">Payment Details</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="mb-1"><strong>Account Name:</strong> BingChecks</p>
+                    <p class="mb-1"><strong>Account Number:</strong> 000000048</p>
+                    <p class="mb-1"><strong>Bank Name:</strong> GTB</p>
+                    <div class="alert alert-info mt-3">
+                        After payment, kindly send proof of payment to our support team.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- JS Calculator Logic -->
+<script>
+document.getElementById('priceForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    
+    const approve = parseFloat(document.getElementById('approve').value);
+    const unitPrice = parseFloat(document.getElementById('unitPrice').value);
+    const numCodes = parseInt(document.getElementById('numCodes').value);
+
+    if (!isNaN(approve) && !isNaN(unitPrice) && !isNaN(numCodes)) {
+        const total = (approve / 100) * unitPrice * numCodes;
+        document.getElementById('resultText').innerText = 
+            `You are to pay ₦${total.toFixed(2)} for generating ${numCodes} code(s).`;
+        document.getElementById('resultBox').classList.remove('d-none');
+    }
+});
+</script>
+{% endblock %}

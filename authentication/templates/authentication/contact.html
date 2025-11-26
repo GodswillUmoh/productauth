@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold" style="color: #7B1FA2;">Contact Us</h1>
+    <p class="text-muted">Have questions or need support? We'd love to hear from you!</p>
+  </div>
+
+  <div class="row">
+    <!-- Contact Form -->
+    <div class="col-md-7 mb-4">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h4 class="mb-4" style="color: #7B1FA2;">Send us a Message</h4>
+          <form method="post" action="#">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-control" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Your Email</label>
+              <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Subject</label>
+              <input type="text" class="form-control" name="subject" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <textarea class="form-control" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn text-white w-100" style="background-color:#7B1FA2;">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="col-md-5">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <h4 class="mb-4" style="color: #7B1FA2;">Our Contact Information</h4>
+          <ul class="list-unstyled">
+            <li class="mb-3">
+              <strong>Email:</strong> support@bingchecks.com
+            </li>
+            <li class="mb-3">
+              <strong>Phone:</strong> +234 800 000 0000
+            </li>
+            <li class="mb-3">
+              <strong>Address:</strong> Lagos, Nigeria
+            </li>
+          </ul>
+          <hr>
+          <h6 class="text-muted">Office Hours</h6>
+          <p>Mon - Fri: 9:00 AM - 5:00 PM</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
