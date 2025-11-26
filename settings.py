@@ -14,7 +14,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEBUG=False
 DEBUG = os.environ.get("DEBUG") == "True"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+#ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 import os
 
