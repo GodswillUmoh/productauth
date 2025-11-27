@@ -39,7 +39,9 @@ if render_host:
 # Fallback for any Render deployment (*.onrender.com)
 env_hosts.append(".onrender.com")
 
-ALLOWED_HOSTS = default_hosts + env_hosts
+#ALLOWED_HOSTS = default_hosts + env_hosts
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
+
 
 print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
