@@ -8,3 +8,14 @@ services:
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: productauth.settings
+      - key: SECRET_KEY
+        value: !edl6ey*0ag9-=uykd8_c231ix1w7(vrvnfc95@*mnl_7^p-!z
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: productauth-tpio.onrender.com
+      - key: RENDER_EXTERNAL_HOSTNAME
+        fromService:
+          type: web
+          name: bingchecks-app
+          property: host
