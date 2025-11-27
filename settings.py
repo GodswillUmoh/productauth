@@ -2,13 +2,16 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load .env in local development ONLY
+# -------------------------------------------------------------------
+# LOAD ENVIRONMENT VARIABLES
+# -------------------------------------------------------------------
+# Only for local environment. Render uses Dashboard env vars.
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # -------------------------------------------------------------------
-# SECRET KEY (Required in production)
+# SECRET KEY
 # -------------------------------------------------------------------
 SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
@@ -20,27 +23,28 @@ if not SECRET_KEY:
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # -------------------------------------------------------------------
-# ALLOWED HOSTS – Clean & Professional
+# ALLOWED HOSTS – Render Compatible
 # -------------------------------------------------------------------
 default_hosts = ["localhost", "127.0.0.1"]
 
+# From ALLOWED_HOSTS env
 env_hosts = os.environ.get("ALLOWED_HOSTS", "")
 env_hosts = [h.strip() for h in env_hosts.split(",") if h.strip()]
 
+# Render auto hostname
 render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
     env_hosts.append(render_host)
 
-# FIX: Allow any render deployment
+# Fallback for any Render deployment (*.onrender.com)
 env_hosts.append(".onrender.com")
 
 ALLOWED_HOSTS = default_hosts + env_hosts
 
 print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
-
 # -------------------------------------------------------------------
-# APPLICATIONS
+# INSTALLED APPS
 # -------------------------------------------------------------------
 INSTALLED_APPS = [
     "jazzmin",
@@ -72,10 +76,13 @@ MIDDLEWARE = [
 ]
 
 # -------------------------------------------------------------------
-# URLS / TEMPLATES / WSGI
+# URL CONFIG
 # -------------------------------------------------------------------
 ROOT_URLCONF = "productauth.urls"
 
+# -------------------------------------------------------------------
+# TEMPLATES
+# -------------------------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -92,10 +99,13 @@ TEMPLATES = [
     },
 ]
 
+# -------------------------------------------------------------------
+# WSGI
+# -------------------------------------------------------------------
 WSGI_APPLICATION = "productauth.wsgi.application"
 
 # -------------------------------------------------------------------
-# DATABASE (SQLite for Render + Local)
+# DATABASE
 # -------------------------------------------------------------------
 DATABASES = {
     "default": {
@@ -105,7 +115,7 @@ DATABASES = {
 }
 
 # -------------------------------------------------------------------
-# PASSWORD VALIDATORS
+# PASSWORD VALIDATION
 # -------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -128,7 +138,6 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-# WhiteNoise for production static files
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
