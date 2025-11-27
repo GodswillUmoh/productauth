@@ -1,3 +1,4 @@
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -35,6 +36,10 @@ ALLOWED_HOSTS = [
 render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
     ALLOWED_HOSTS.append(render_host)
+
+
+print("🔥 ALLOWED_HOSTS LOADED:", ALLOWED_HOSTS)
+
 
 
 
