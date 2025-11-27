@@ -9,6 +9,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()  # Local only
 
+# -------- ALLOWED HOSTS (PROFESSIONAL CONFIG) -------- #
+
+# Local development hosts
+default_hosts = ["localhost", "127.0.0.1"]
+
+# Hosts from environment variable
+env_hosts = os.getenv("ALLOWED_HOSTS", "")
+env_hosts = [h.strip() for h in env_hosts.split(",") if h.strip()]
+
+# Render hostname (auto-injected)
+render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if render_host:
+    env_hosts.append(render_host)
+
+# Final ALLOWED_HOSTS
+ALLOWED_HOSTS = default_hosts + env_hosts
+
+print("🔥 ALLOWED_HOSTS LOADED:", ALLOWED_HOSTS)
+
+
 SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable not set")
@@ -26,19 +46,7 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 #render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "productauth-tpio.onrender.com",
-]
 
-# Also allow any Render hostname (future redeploys)
-render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if render_host:
-    ALLOWED_HOSTS.append(render_host)
-
-
-print("🔥 ALLOWED_HOSTS LOADED:", ALLOWED_HOSTS)
 
 
 
@@ -133,5 +141,5 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
-ALLOWED_HOSTS.append("productauth-tpio.onrender.com")
+
 
