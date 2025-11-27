@@ -26,9 +26,16 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 #render_host = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+# Add Render auto hostname if present
 render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
     ALLOWED_HOSTS.append(render_host)
+
+# Add ALLOWED_HOSTS from environment dashboard
+extra_hosts = os.environ.get("ALLOWED_HOSTS")
+if extra_hosts:
+    ALLOWED_HOSTS.extend(extra_hosts.split(","))
 
 
 INSTALLED_APPS = [
@@ -107,7 +114,7 @@ else:
 
 
 
-# ✅ Static & Media, whitenoise
+# ✅ Static & Media,
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
@@ -119,6 +126,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 
 
