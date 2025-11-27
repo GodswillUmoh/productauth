@@ -23,25 +23,31 @@ if not SECRET_KEY:
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # -------------------------------------------------------------------
+# -------------------------------------------------------------------
 # ALLOWED HOSTS – Render Compatible
 # -------------------------------------------------------------------
-default_hosts = ["localhost", "127.0.0.1"]
+default_hosts = [
+ "localhost",
+ "127.0.0.1",
+ "productauth-tpio.onrender.com",
+ "productauth-tpio.onrender.com",
+ ".onrender.com"
+]
 
-# From ALLOWED_HOSTS env
-env_hosts = os.environ.get("ALLOWED_HOSTS", "")
-env_hosts = [h.strip() for h in env_hosts.split(",") if h.strip()]
+# Load ALLOWED_HOSTS from environment
+env_hosts_raw = os.environ.get("ALLOWED_HOSTS", "")
+env_hosts = [h.strip() for h in env_hosts_raw.split(",") if h.strip()]
 
-# Render auto hostname
+# Add Render auto hostname
 render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
     env_hosts.append(render_host)
 
-# Fallback for any Render deployment (*.onrender.com)
+# Allow all *.onrender.com hosts
 env_hosts.append(".onrender.com")
 
-#ALLOWED_HOSTS = default_hosts + env_hosts
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
-
+# Final ALLOWED_HOSTS list
+ALLOWED_HOSTS = default_hosts + env_hosts
 
 print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
