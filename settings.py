@@ -24,36 +24,7 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 # ---------------------------------------------------------------
 # ALLOWED HOSTS — CLEAN, CORRECT, 100% WORKING ON RENDER
 # ---------------------------------------------------------------
-def normalize(hostname: str):
-    """Remove spaces and trailing dots."""
-    return hostname.strip().rstrip(".")
-
-# ---------------------------------------------------------------
-# ALLOWED HOSTS — FINAL FIX
-# ---------------------------------------------------------------
-print("Incoming Render host:", os.environ.get("RENDER_EXTERNAL_HOSTNAME"))
-
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "productauth-tpio.onrender.com",  # your site
-    ".onrender.com",                  # wildcard (subdomains)
-]
-
-# Add Render auto hostname — usually same as your URL
-render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if render_host:
-    ALLOWED_HOSTS.append(render_host.strip())
-
-# Add user-defined env values if any
-extra_hosts = os.environ.get("ALLOWED_HOSTS")
-if extra_hosts:
-    ALLOWED_HOSTS.extend([h.strip() for h in extra_hosts.split(",") if h.strip()])
-
-# Remove duplicates
-ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
-
-print("🔥 FINAL ALLOWED_HOSTS:", ALLOWED_HOSTS)
+ALLOWED_HOSTS = ["*"]
 
 # ---------------------------------------------------------------
 # INSTALLED APPS
