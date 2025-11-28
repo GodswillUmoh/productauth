@@ -2,58 +2,50 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # LOAD ENVIRONMENT VARIABLES
-# -------------------------------------------------------------------
-# Only for local environment. Render uses Dashboard env vars.
+# ---------------------------------------------------------------
+# Only used locally. Render injects variables automatically.
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # SECRET KEY
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("❌ SECRET_KEY environment variable not set")
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # DEBUG MODE
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-# -------------------------------------------------------------------
-# -------------------------------------------------------------------
-# ALLOWED HOSTS – Render Compatible
-# -------------------------------------------------------------------
-default_hosts = [
- "localhost",
- "127.0.0.1",
- "productauth-tpio.onrender.com",
- "productauth-tpio.onrender.com",
- ".onrender.com"
-]
+# ---------------------------------------------------------------
+# ALLOWED HOSTS – FULLY RENDER COMPATIBLE
+# ---------------------------------------------------------------
+default_hosts = ["localhost", "127.0.0.1"]
 
-# Load ALLOWED_HOSTS from environment
-env_hosts_raw = os.environ.get("ALLOWED_HOSTS", "")
-env_hosts = [h.strip() for h in env_hosts_raw.split(",") if h.strip()]
+# Custom hosts from env
+raw_env_hosts = os.environ.get("ALLOWED_HOSTS", "")
+env_hosts = [h.strip() for h in raw_env_hosts.split(",") if h.strip()]
 
-# Add Render auto hostname
-render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if render_host:
-    env_hosts.append(render_host)
+# Render’s auto hostname
+render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if render_hostname:
+    env_hosts.append(render_hostname)
 
-# Allow all *.onrender.com hosts
+# Allow all *.onrender.com
 env_hosts.append(".onrender.com")
 
-# Final ALLOWED_HOSTS list
 ALLOWED_HOSTS = default_hosts + env_hosts
 
 print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # INSTALLED APPS
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 INSTALLED_APPS = [
     "jazzmin",
     "django.contrib.admin",
@@ -69,9 +61,9 @@ INSTALLED_APPS = [
     "authentication",
 ]
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # MIDDLEWARE
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -81,16 +73,17 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # URL CONFIG
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 ROOT_URLCONF = "productauth.urls"
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # TEMPLATES
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -107,14 +100,14 @@ TEMPLATES = [
     },
 ]
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # WSGI
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 WSGI_APPLICATION = "productauth.wsgi.application"
 
-# -------------------------------------------------------------------
-# DATABASE
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
+# DATABASE (SQLite for now)
+# ---------------------------------------------------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -122,9 +115,9 @@ DATABASES = {
     }
 }
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # PASSWORD VALIDATION
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -132,16 +125,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # INTERNATIONALIZATION
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_TZ = True
 
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 # STATIC & MEDIA FILES
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -151,7 +144,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# -------------------------------------------------------------------
-# DEFAULT PRIMARY KEY FIELD TYPE
-# -------------------------------------------------------------------
+# ---------------------------------------------------------------
+# DEFAULT PRIMARY KEY
+# ---------------------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
