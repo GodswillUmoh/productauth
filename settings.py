@@ -3,9 +3,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # ---------------------------------------------------------------
-# LOAD ENVIRONMENT VARIABLES
+# LOAD ENVIRONMENT VARIABLES (LOCAL ONLY)
 # ---------------------------------------------------------------
-# Only used locally. Render injects variables automatically.
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,55 +22,35 @@ if not SECRET_KEY:
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # ---------------------------------------------------------------
-# ALLOWED HOSTS – FULLY RENDER COMPATIBLE
+# ALLOWED HOSTS — CLEAN, CORRECT, 100% WORKING ON RENDER
 # ---------------------------------------------------------------
-default_hosts = [
-    'localhost',
-    '127.0.0.1',
-    'productauth-tpio.onrender.com',
-    '.onrender.com', 
-    'productauth-tpio.onrender.com (from RENDER_EXTERNAL_HOSTNAME)',
-    '.onrender.com'
+def normalize(hostname: str):
+    """Remove spaces and trailing dots."""
+    return hostname.strip().rstrip(".")
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "productauth-tpio.onrender.com",
+    ".onrender.com",
 ]
 
-raw_env_hosts = os.environ.get("ALLOWED_HOSTS", "")
-env_hosts = [h.strip() for h in raw_env_hosts.split(",") if h.strip()]
+# Host injected by Render automatically
+render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if render_host:
+    ALLOWED_HOSTS.append(normalize(render_host))
 
-render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if render_hostname:
-    env_hosts.append(render_hostname)
+# Any custom env value provided in Render dashboard
+raw_env = os.environ.get("ALLOWED_HOSTS", "")
+if raw_env:
+    for h in raw_env.split(","):
+        if h.strip():
+            ALLOWED_HOSTS.append(normalize(h))
 
-env_hosts.append(".onrender.com")  # wildcard support
+# Deduplicate & remove empty entries
+ALLOWED_HOSTS = list({normalize(h) for h in ALLOWED_HOSTS if h})
 
-# ---------------------------------------------------------------
-# ALLOWED HOSTS (Render-safe with normalization)
-# ---------------------------------------------------------------
-
-def normalize_host(host):
-    """Remove trailing dot from host header."""
-    return host.rstrip(".")
-
-default_hosts = [
-    normalize_host("localhost"),
-    normalize_host("127.0.0.1"),
-    normalize_host("productauth-tpio.onrender.com"),
-    normalize_host(".onrender.com"),
-]
-
-raw_env_hosts = os.environ.get("ALLOWED_HOSTS", "")
-env_hosts = [normalize_host(h.strip()) for h in raw_env_hosts.split(",") if h.strip()]
-
-render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-if render_hostname:
-    env_hosts.append(normalize_host(render_hostname))
-
-# Final list
-ALLOWED_HOSTS = default_hosts + env_hosts
-
-# Remove duplicates and blanks
-ALLOWED_HOSTS = list({h for h in ALLOWED_HOSTS if h})
-
-print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
+print("🔥 FINAL ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
 # ---------------------------------------------------------------
 # INSTALLED APPS
@@ -136,7 +115,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "productauth.wsgi.application"
 
 # ---------------------------------------------------------------
-# DATABASE (SQLite for now)
+# DATABASE
 # ---------------------------------------------------------------
 DATABASES = {
     "default": {
