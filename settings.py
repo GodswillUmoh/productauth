@@ -43,10 +43,33 @@ if render_hostname:
 
 env_hosts.append(".onrender.com")  # wildcard support
 
+# ---------------------------------------------------------------
+# ALLOWED HOSTS (Render-safe with normalization)
+# ---------------------------------------------------------------
+
+def normalize_host(host):
+    """Remove trailing dot from host header."""
+    return host.rstrip(".")
+
+default_hosts = [
+    normalize_host("localhost"),
+    normalize_host("127.0.0.1"),
+    normalize_host("productauth-tpio.onrender.com"),
+    normalize_host(".onrender.com"),
+]
+
+raw_env_hosts = os.environ.get("ALLOWED_HOSTS", "")
+env_hosts = [normalize_host(h.strip()) for h in raw_env_hosts.split(",") if h.strip()]
+
+render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if render_hostname:
+    env_hosts.append(normalize_host(render_hostname))
+
+# Final list
 ALLOWED_HOSTS = default_hosts + env_hosts
 
-# 🔥 Clean empty strings (VERY IMPORTANT)
-ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
+# Remove duplicates and blanks
+ALLOWED_HOSTS = list({h for h in ALLOWED_HOSTS if h})
 
 print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
