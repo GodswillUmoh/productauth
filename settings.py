@@ -22,7 +22,7 @@ if not SECRET_KEY:
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # ---------------------------------------------------------------
-# ALLOWED HOSTS — CLEAN, CORRECT, 100% WORKING ON RENDER
+# ALLOWED HOSTS — 
 # ---------------------------------------------------------------
 ALLOWED_HOSTS = ["*"]
 
