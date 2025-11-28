@@ -28,27 +28,30 @@ def normalize(hostname: str):
     """Remove spaces and trailing dots."""
     return hostname.strip().rstrip(".")
 
+# ---------------------------------------------------------------
+# ALLOWED HOSTS — FINAL FIX
+# ---------------------------------------------------------------
+print("Incoming Render host:", os.environ.get("RENDER_EXTERNAL_HOSTNAME"))
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "productauth-tpio.onrender.com",
-    ".onrender.com",
+    "productauth-tpio.onrender.com",  # your site
+    ".onrender.com",                  # wildcard (subdomains)
 ]
 
-# Host injected by Render automatically
+# Add Render auto hostname — usually same as your URL
 render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_host:
-    ALLOWED_HOSTS.append(normalize(render_host))
+    ALLOWED_HOSTS.append(render_host.strip())
 
-# Any custom env value provided in Render dashboard
-raw_env = os.environ.get("ALLOWED_HOSTS", "")
-if raw_env:
-    for h in raw_env.split(","):
-        if h.strip():
-            ALLOWED_HOSTS.append(normalize(h))
+# Add user-defined env values if any
+extra_hosts = os.environ.get("ALLOWED_HOSTS")
+if extra_hosts:
+    ALLOWED_HOSTS.extend([h.strip() for h in extra_hosts.split(",") if h.strip()])
 
-# Deduplicate & remove empty entries
-ALLOWED_HOSTS = list({normalize(h) for h in ALLOWED_HOSTS if h})
+# Remove duplicates
+ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 print("🔥 FINAL ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
