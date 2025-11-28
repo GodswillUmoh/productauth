@@ -25,9 +25,14 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 # ---------------------------------------------------------------
 # ALLOWED HOSTS – FULLY RENDER COMPATIBLE
 # ---------------------------------------------------------------
-default_hosts = ["localhost", "127.0.0.1",
-                 'productauth-tpio.onrender.com',
-                 '.onrender.com']
+default_hosts = [
+    'localhost',
+    '127.0.0.1',
+    'productauth-tpio.onrender.com',
+    '.onrender.com', 
+    'productauth-tpio.onrender.com (from RENDER_EXTERNAL_HOSTNAME)',
+    '.onrender.com'
+]
 
 raw_env_hosts = os.environ.get("ALLOWED_HOSTS", "")
 env_hosts = [h.strip() for h in raw_env_hosts.split(",") if h.strip()]
@@ -39,6 +44,9 @@ if render_hostname:
 env_hosts.append(".onrender.com")  # wildcard support
 
 ALLOWED_HOSTS = default_hosts + env_hosts
+
+# 🔥 Clean empty strings (VERY IMPORTANT)
+ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
 
 print("🔥 ALLOWED_HOSTS:", ALLOWED_HOSTS)
 
