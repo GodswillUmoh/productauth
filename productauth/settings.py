@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,7 +12,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 # DEBUG should ALWAYS come from environment
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-# Professional way: load allowed hosts from env
+# Load allowed hosts securely
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # Required on Render for static files
+    # Required for static files on Render
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -77,14 +78,27 @@ WSGI_APPLICATION = 'productauth.wsgi.application'
 
 
 # --------------------------------------------------
-# 🗄 DATABASE
+# 🗄 DATABASE CONFIG (SQLite Locally, PostgreSQL on Render)
 # --------------------------------------------------
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL:
+    # Running on Render → Use PostgreSQL
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
-}
+else:
+    # Local development → Use SQLite
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # --------------------------------------------------
@@ -98,16 +112,11 @@ USE_TZ = True
 # --------------------------------------------------
 # 📁 STATIC & MEDIA (Render-Ready)
 # --------------------------------------------------
-
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']   # dev
+STATIC_ROOT = BASE_DIR / 'staticfiles'     # production
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Required for production static serving
+# Required for WhiteNoise static serving
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/media/'
