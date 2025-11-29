@@ -1,12 +1,23 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-abc123'
+# --------------------------------------------------
+# 🔐 SECURITY CONFIG
+# --------------------------------------------------
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-DEBUG = True
-ALLOWED_HOSTS = ["*"]
+# DEBUG should ALWAYS come from environment
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
+# Professional way: load allowed hosts from env
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
+
+# --------------------------------------------------
+# 🔧 INSTALLED APPS
+# --------------------------------------------------
 INSTALLED_APPS = [
     "jazzmin",
     'django.contrib.admin',
@@ -21,10 +32,14 @@ INSTALLED_APPS = [
     'accounts',
 ]
 
+
+# --------------------------------------------------
+# 🔧 MIDDLEWARE
+# --------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-    # ✅ Required for images, CSS, JS in Render
+    # Required on Render for static files
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -34,8 +49,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
+
 ROOT_URLCONF = 'productauth.urls'
 
+
+# --------------------------------------------------
+# 🔧 TEMPLATES
+# --------------------------------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -52,8 +72,13 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'productauth.wsgi.application'
 
+
+# --------------------------------------------------
+# 🗄 DATABASE
+# --------------------------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -61,22 +86,32 @@ DATABASES = {
     }
 }
 
+
+# --------------------------------------------------
+# 🌍 INTERNATIONALIZATION
+# --------------------------------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_TZ = True
 
 
 # --------------------------------------------------
-# ✅ STATIC & MEDIA CONFIG — REQUIRED FOR RENDER
+# 📁 STATIC & MEDIA (Render-Ready)
 # --------------------------------------------------
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']      # development
-STATIC_ROOT = BASE_DIR / 'staticfiles'        # production
 
-# ✔ WhiteNoise storage for compressed static files
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Required for production static serving
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
